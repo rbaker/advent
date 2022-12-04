@@ -9,7 +9,7 @@ var colA = "ABC"
 var colB = "XYZ"
 
 var data2, _ = os.ReadFile("resources/day2.txt")
-var rounds = strings.Split(string(data2), "\n")
+var rounds = strings.Split(strings.ReplaceAll(string(data2), "\r\n", "\n"), "\n")
 
 func day2part1() int {
 
