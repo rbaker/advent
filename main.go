@@ -23,4 +23,8 @@ func main() {
 	fmt.Println("\nDay 5")
 	fmt.Println(day5part1())
 	fmt.Println(day5part2())
+
+	fmt.Println("\nDay 6")
+	fmt.Println(day6part1())
+	fmt.Println(day6part2())
 }
