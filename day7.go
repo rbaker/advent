@@ -10,10 +10,9 @@ import (
 
 var data7, _ = os.ReadFile("resources/day7.txt")
 var output = strings.Split(strings.ReplaceAll(string(data7), "\r\n", "\n"), "\n")
+var dirMap = getDirectorySizes()
 
 func day7part1() int {
-	dirMap := getDirectorySizes()
-
 	total := 0
 	for _, v := range dirMap {
 		if v <= 100000 {
@@ -24,7 +23,6 @@ func day7part1() int {
 }
 
 func day7part2() int {
-	dirMap := getDirectorySizes()
 	required := dirMap[""] + 30000000 - 70000000
 
 	smallest := dirMap[""]
