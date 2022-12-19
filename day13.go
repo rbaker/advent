@@ -27,7 +27,6 @@ func day13part1() int {
 
 		if compare(l[0].list, r[0].list) == 1 {
 			total += i + 1
-		} else {
 		}
 	}
 	return total
