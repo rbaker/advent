@@ -57,7 +57,7 @@ func day15part2() int {
 		})
 		highestExtent := 0
 		for h := 0; h < len(horizontal); h++ {
-			if horizontal[h][0] > highestExtent+1 && horizontal[h][0] > 0 {
+			if horizontal[h][0] > highestExtent+1 {
 				return ((horizontal[h][0]-1)*4000000 + y)
 			}
 			if horizontal[h][1] >= highestExtent {
