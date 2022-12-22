@@ -49,8 +49,8 @@ func main() {
 	fmt.Println(day11part2())
 
 	fmt.Println("\nDay 12")
-	//fmt.Println(day12part1())
-	//fmt.Println(day12part2())
+	fmt.Println(day12part1())
+	fmt.Println(day12part2())
 
 	fmt.Println("\nDay 13")
 	fmt.Println(day13part1())
@@ -59,4 +59,8 @@ func main() {
 	fmt.Println("\nDay 14")
 	fmt.Println(day14part1())
 	fmt.Println(day14part2())
+
+	fmt.Println("\nDay 15")
+	fmt.Println(day15part1())
+	fmt.Println(day15part2())
 }
