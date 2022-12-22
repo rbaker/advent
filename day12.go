@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"math"
 	"os"
-	"sort"
 	"strings"
 )
 
@@ -15,9 +14,8 @@ type graph struct {
 }
 type node [2]int
 type nodeInformation struct {
-	node         node
-	shortestPath []node
-	distance     int
+	node     node
+	distance int
 }
 
 var data12, _ = os.ReadFile("resources/day12.txt")
@@ -25,33 +23,45 @@ var mapLines = strings.Split(strings.ReplaceAll(string(data12), "\r\n", "\n"), "
 var g = createGraph()
 
 func day12part1() int {
-	g.nodes[g.start] = nodeInformation{g.start, []node{}, 0}
-	settled := []nodeInformation{}
-	unsettled := []nodeInformation{{g.start, []node{}, 0}}
-	fmt.Println(g)
-	for len(unsettled) > 0 {
+	return getDistance(g.start)
+}
+func day12part2() int {
+	lowest := getDistance(g.start)
+	for i, line := range mapLines {
+		for j, letter := range line {
+			if letter == 'a' {
+				distance := getDistance(node{i, j})
+				if distance > 0 {
+					lowest = int(math.Min(float64(distance), float64(lowest)))
+				}
+			}
+		}
 
-		sort.Slice(unsettled, func(i, j int) bool {
-			return unsettled[i].distance < unsettled[j].distance
-		})
-		currentNode := unsettled[0]
+	}
+	return lowest
+}
+
+func getDistance(start node) int {
+	g.nodes[start] = nodeInformation{start, 0}
+	settled := []nodeInformation{}
+	unsettled := make(map[node]nodeInformation)
+	unsettled[start] = nodeInformation{start, 0}
+	for len(unsettled) > 0 {
+		currentNode := getLowest(unsettled)
+		delete(unsettled, currentNode.node)
 
 		for _, adjacent := range g.vertices[currentNode.node] {
 			if !contains(settled, adjacent) {
 				if currentNode.distance+1 < g.nodes[adjacent].distance {
-					currentNode.shortestPath = append(currentNode.shortestPath, currentNode.node)
-					g.nodes[adjacent] = nodeInformation{adjacent, currentNode.shortestPath, currentNode.distance + 1}
+					g.nodes[adjacent] = nodeInformation{adjacent, currentNode.distance + 1}
 				}
-				unsettled = append(unsettled, g.nodes[adjacent])
+				unsettled[adjacent] = g.nodes[adjacent]
 			}
 		}
 		settled = append(settled, g.nodes[currentNode.node])
-		copy(unsettled, unsettled[1:])
-
 	}
-	fmt.Println(g.nodes[g.end])
 
-	return 0
+	return g.nodes[g.end].distance
 }
 
 func createGraph() graph {
@@ -72,7 +82,7 @@ func createGraph() graph {
 	g.vertices = make(map[node][]node)
 	for i, line := range mapLines {
 		for j, letter := range line {
-			g.nodes[node{i, j}] = nodeInformation{node{i, j}, []node{}, 9223372036854775807}
+			g.nodes[node{i, j}] = nodeInformation{node{i, j}, int(9999999999999)}
 
 			if i > 0 && mapLines[i-1][j] <= byte(letter)+1 {
 				g.vertices[node{i, j}] = append(g.vertices[node{i, j}], node{i - 1, j})
@@ -97,4 +107,13 @@ func contains(s []nodeInformation, e node) bool {
 		}
 	}
 	return false
+}
+func getLowest(nodes map[node]nodeInformation) nodeInformation {
+	var n nodeInformation
+	for _, v := range nodes {
+		if v.distance <= n.distance || n.distance == 0 {
+			n = v
+		}
+	}
+	return n
 }
